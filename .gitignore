@@ -46,6 +46,7 @@ next-env.d.ts
 
 # supabase
 .supabase
+supabase/.temp/
 
 # AI
 .cursorrules
