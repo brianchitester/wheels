@@ -176,8 +176,8 @@ export default async function AdminVehiclesPage(props: {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-gray-900">Vehicles</h2>
-        <p className="mt-1 text-sm text-gray-600">
+        <h2 className="text-2xl font-bold text-foreground">Vehicles</h2>
+        <p className="mt-1 text-sm text-muted-foreground">
           Add and maintain fleet inventory for location <code>main</code>.
         </p>
       </div>
@@ -192,8 +192,8 @@ export default async function AdminVehiclesPage(props: {
         </div>
       )}
 
-      <section className="rounded-lg border bg-white p-4">
-        <h3 className="text-lg font-semibold text-gray-900">Add Vehicle</h3>
+      <section className="rounded-lg border bg-card p-4">
+        <h3 className="text-lg font-semibold text-foreground">Add Vehicle</h3>
         <form action={createVehicle} className="mt-4 grid gap-3 sm:grid-cols-4">
           <input
             name="asset_tag"
@@ -229,13 +229,13 @@ export default async function AdminVehiclesPage(props: {
         </form>
       </section>
 
-      <section className="rounded-lg border bg-white">
+      <section className="rounded-lg border bg-card">
         <div className="border-b px-4 py-3">
-          <h3 className="text-lg font-semibold text-gray-900">Fleet</h3>
+          <h3 className="text-lg font-semibold text-foreground">Fleet</h3>
         </div>
         <div className="overflow-x-auto">
           <table className="min-w-full text-sm">
-            <thead className="bg-gray-50 text-left text-gray-600">
+            <thead className="bg-background text-left text-muted-foreground">
               <tr>
                 <th className="px-4 py-2">Asset Tag</th>
                 <th className="px-4 py-2">Type</th>
@@ -247,8 +247,8 @@ export default async function AdminVehiclesPage(props: {
             <tbody>
               {typedVehicles.map((vehicle) => (
                 <tr key={vehicle.id} className="border-t">
-                  <td className="px-4 py-2 font-medium text-gray-900">{vehicle.asset_tag}</td>
-                  <td className="px-4 py-2 text-gray-700">
+                  <td className="px-4 py-2 font-medium text-foreground">{vehicle.asset_tag}</td>
+                  <td className="px-4 py-2 text-muted-foreground">
                     {vehicle.vehicle_types?.name ?? "Unknown"}
                   </td>
                   <td className="px-4 py-2">
@@ -262,7 +262,7 @@ export default async function AdminVehiclesPage(props: {
                       {vehicle.status}
                     </span>
                   </td>
-                  <td className="px-4 py-2 text-gray-700">
+                  <td className="px-4 py-2 text-muted-foreground">
                     <form action={updateVehicleNotes} className="flex gap-2">
                       <input type="hidden" name="vehicle_id" value={vehicle.id} />
                       <input
@@ -297,7 +297,7 @@ export default async function AdminVehiclesPage(props: {
               ))}
               {typedVehicles.length === 0 && (
                 <tr>
-                  <td className="px-4 py-6 text-gray-500" colSpan={5}>
+                  <td className="px-4 py-6 text-muted-foreground" colSpan={5}>
                     No vehicles yet.
                   </td>
                 </tr>
@@ -309,3 +309,4 @@ export default async function AdminVehiclesPage(props: {
     </div>
   );
 }
+

@@ -56,16 +56,16 @@ export default async function PosHomePage(props: { searchParams: SearchParams })
       )}
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <section className="rounded-lg border bg-white">
+        <section className="rounded-lg border bg-card">
           <div className="border-b px-4 py-3">
-            <h2 className="text-lg font-semibold text-gray-900">Today&apos;s Reservations</h2>
+            <h2 className="text-lg font-semibold text-foreground">Today&apos;s Reservations</h2>
           </div>
           <div className="divide-y">
             {(reservations ?? []).map((reservation) => (
               <div key={reservation.id} className="flex items-center justify-between px-4 py-3">
                 <div>
-                  <p className="font-medium text-gray-900">{reservation.customer_name}</p>
-                  <p className="text-sm text-gray-600">
+                  <p className="font-medium text-foreground">{reservation.customer_name}</p>
+                  <p className="text-sm text-muted-foreground">
                     {new Date(reservation.start_time).toLocaleTimeString()} -{" "}
                     {new Date(reservation.end_time).toLocaleTimeString()}
                   </p>
@@ -79,21 +79,21 @@ export default async function PosHomePage(props: { searchParams: SearchParams })
               </div>
             ))}
             {(reservations ?? []).length === 0 && (
-              <div className="px-4 py-6 text-sm text-gray-500">No reservations today.</div>
+              <div className="px-4 py-6 text-sm text-muted-foreground">No reservations today.</div>
             )}
           </div>
         </section>
 
-        <section className="rounded-lg border bg-white">
+        <section className="rounded-lg border bg-card">
           <div className="border-b px-4 py-3">
-            <h2 className="text-lg font-semibold text-gray-900">Active Rentals</h2>
+            <h2 className="text-lg font-semibold text-foreground">Active Rentals</h2>
           </div>
           <div className="divide-y">
             {(rentals ?? []).map((rental) => (
               <div key={rental.id} className="flex items-center justify-between px-4 py-3">
                 <div>
-                  <p className="font-medium text-gray-900">{rental.customer_name}</p>
-                  <p className="text-sm text-gray-600">
+                  <p className="font-medium text-foreground">{rental.customer_name}</p>
+                  <p className="text-sm text-muted-foreground">
                     Due {new Date(rental.end_time).toLocaleString()}
                   </p>
                 </div>
@@ -106,7 +106,7 @@ export default async function PosHomePage(props: { searchParams: SearchParams })
               </div>
             ))}
             {(rentals ?? []).length === 0 && (
-              <div className="px-4 py-6 text-sm text-gray-500">No active rentals.</div>
+              <div className="px-4 py-6 text-sm text-muted-foreground">No active rentals.</div>
             )}
           </div>
         </section>
@@ -114,4 +114,5 @@ export default async function PosHomePage(props: { searchParams: SearchParams })
     </div>
   );
 }
+
 

@@ -74,8 +74,8 @@ export function ReservationPickupFlow({
     <form action={action} className="space-y-6">
       <input type="hidden" name="payload_json" value={JSON.stringify(payload)} />
 
-      <section className="rounded-lg border bg-white p-4">
-        <h2 className="text-lg font-semibold text-gray-900">Assign Vehicles</h2>
+      <section className="rounded-lg border bg-card p-4">
+        <h2 className="text-lg font-semibold text-foreground">Assign Vehicles</h2>
         <label className="mt-2 inline-flex items-center gap-2 text-xs">
           <input
             type="checkbox"
@@ -90,7 +90,7 @@ export function ReservationPickupFlow({
             const selected = assignments[line.vehicle_type_id] ?? [];
             return (
               <div key={line.vehicle_type_id} className="rounded-md border p-3">
-                <p className="font-medium text-gray-900">
+                <p className="font-medium text-foreground">
                   {line.vehicle_type_name} - {line.duration_label} x {line.quantity}
                 </p>
                 <select
@@ -111,7 +111,7 @@ export function ReservationPickupFlow({
                       </option>
                     ))}
                 </select>
-                <p className="mt-1 text-xs text-gray-600">
+                <p className="mt-1 text-xs text-muted-foreground">
                   Selected {selected.length} / {line.quantity}
                 </p>
               </div>
@@ -120,7 +120,7 @@ export function ReservationPickupFlow({
         </div>
       </section>
 
-      <section className="rounded-lg border bg-white p-4">
+      <section className="rounded-lg border bg-card p-4">
         <label className="inline-flex items-center gap-2 text-sm font-medium">
           <input
             type="checkbox"
@@ -148,4 +148,5 @@ export function ReservationPickupFlow({
     </form>
   );
 }
+
 

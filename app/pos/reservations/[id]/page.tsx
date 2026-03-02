@@ -164,16 +164,16 @@ export default async function PosReservationDetailPage(props: {
 
   return (
     <div className="space-y-6">
-      <div className="rounded-lg border bg-white p-4">
-        <h2 className="text-xl font-bold text-gray-900">Reservation Pickup</h2>
-        <p className="mt-1 text-sm text-gray-600">
+      <div className="rounded-lg border bg-card p-4">
+        <h2 className="text-xl font-bold text-foreground">Reservation Pickup</h2>
+        <p className="mt-1 text-sm text-muted-foreground">
           {reservation.customer_name} • {new Date(reservation.start_time).toLocaleString()}
         </p>
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-muted-foreground">
           {reservation.customer_email ?? "-"} • {reservation.customer_phone ?? "-"}
         </p>
-        <p className="text-sm text-gray-600">Status: {reservation.status}</p>
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-muted-foreground">Status: {reservation.status}</p>
+        <p className="text-sm text-muted-foreground">
           Deposit:{" "}
           {latestDepositPayment && latestDepositPayment.status === "succeeded"
             ? `Paid $${(latestDepositPayment.amount_cents / 100).toFixed(2)}`
@@ -192,8 +192,8 @@ export default async function PosReservationDetailPage(props: {
         </div>
       )}
 
-      <section className="rounded-lg border bg-white p-4">
-        <h3 className="font-semibold text-gray-900">Deposit Payments</h3>
+      <section className="rounded-lg border bg-card p-4">
+        <h3 className="font-semibold text-foreground">Deposit Payments</h3>
         <div className="mt-3 space-y-2 text-sm">
           {(depositPayments ?? []).map((payment) => (
             <div key={payment.id} className="flex justify-between rounded-md border px-3 py-2">
@@ -204,7 +204,7 @@ export default async function PosReservationDetailPage(props: {
             </div>
           ))}
           {(depositPayments ?? []).length === 0 && (
-            <p className="text-gray-500">No deposit payments recorded.</p>
+            <p className="text-muted-foreground">No deposit payments recorded.</p>
           )}
         </div>
       </section>

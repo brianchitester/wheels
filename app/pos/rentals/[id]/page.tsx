@@ -93,12 +93,12 @@ export default async function PosRentalDetailPage(props: {
 
   return (
     <div className="space-y-6">
-      <div className="rounded-lg border bg-white p-4">
-        <h2 className="text-xl font-bold text-gray-900">Rental Detail</h2>
-        <p className="mt-1 text-sm text-gray-600">
+      <div className="rounded-lg border bg-card p-4">
+        <h2 className="text-xl font-bold text-foreground">Rental Detail</h2>
+        <p className="mt-1 text-sm text-muted-foreground">
           {rental.customer_name} • Status: {rental.status}
         </p>
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-muted-foreground">
           {new Date(rental.start_time).toLocaleString()} to{" "}
           {new Date(rental.end_time).toLocaleString()}
         </p>
@@ -115,14 +115,14 @@ export default async function PosRentalDetailPage(props: {
         </div>
       )}
 
-      <section className="rounded-lg border bg-white p-4">
-        <h3 className="font-semibold text-gray-900">Items</h3>
+      <section className="rounded-lg border bg-card p-4">
+        <h3 className="font-semibold text-foreground">Items</h3>
         <div className="mt-3 space-y-2 text-sm">
           {(rentalItems ?? []).map((item) => (
             <div key={item.id} className="flex justify-between rounded-md border px-3 py-2">
               <div>
                 <p className="font-medium">{item.vehicle_types?.name ?? "Vehicle"}</p>
-                <p className="text-gray-600">
+                <p className="text-muted-foreground">
                   {item.pricing_rules?.duration_value ?? 1}{" "}
                   {item.pricing_rules?.duration_unit ?? "day"} x {item.quantity}
                 </p>
@@ -130,24 +130,24 @@ export default async function PosRentalDetailPage(props: {
               <p className="font-medium">${((item.quantity * item.unit_price_cents) / 100).toFixed(2)}</p>
             </div>
           ))}
-          <p className="font-medium text-gray-900">Total: ${(totalAmount / 100).toFixed(2)}</p>
+          <p className="font-medium text-foreground">Total: ${(totalAmount / 100).toFixed(2)}</p>
         </div>
       </section>
 
-      <section className="rounded-lg border bg-white p-4">
-        <h3 className="font-semibold text-gray-900">Assigned Vehicles</h3>
+      <section className="rounded-lg border bg-card p-4">
+        <h3 className="font-semibold text-foreground">Assigned Vehicles</h3>
         <div className="mt-3 flex flex-wrap gap-2 text-sm">
           {(rentalAssets ?? []).map((asset) => (
             <span key={asset.id} className="rounded-md border px-2 py-1">
               {asset.vehicles?.asset_tag ?? asset.vehicle_id}
             </span>
           ))}
-          {(rentalAssets ?? []).length === 0 && <p className="text-gray-500">No assigned assets.</p>}
+          {(rentalAssets ?? []).length === 0 && <p className="text-muted-foreground">No assigned assets.</p>}
         </div>
       </section>
 
-      <section className="rounded-lg border bg-white p-4">
-        <h3 className="font-semibold text-gray-900">Payments</h3>
+      <section className="rounded-lg border bg-card p-4">
+        <h3 className="font-semibold text-foreground">Payments</h3>
         <div className="mt-3 space-y-2 text-sm">
           {(payments ?? []).map((payment) => (
             <div key={payment.id} className="flex justify-between rounded-md border px-3 py-2">
@@ -157,14 +157,14 @@ export default async function PosRentalDetailPage(props: {
               <span>${(payment.amount_cents / 100).toFixed(2)}</span>
             </div>
           ))}
-          {(payments ?? []).length === 0 && <p className="text-gray-500">No payments recorded.</p>}
+          {(payments ?? []).length === 0 && <p className="text-muted-foreground">No payments recorded.</p>}
         </div>
       </section>
 
       {rental.status === "active" ? (
-        <form action={returnRental} className="rounded-lg border bg-white p-4">
+        <form action={returnRental} className="rounded-lg border bg-card p-4">
           <input type="hidden" name="rental_id" value={rental.id} />
-          <label className="mb-1 block text-sm font-medium text-gray-700">Return notes</label>
+          <label className="mb-1 block text-sm font-medium text-muted-foreground">Return notes</label>
           <textarea
             name="return_notes"
             rows={3}
@@ -180,7 +180,7 @@ export default async function PosRentalDetailPage(props: {
           </div>
         </form>
       ) : (
-        <div className="rounded-lg border bg-white p-4 text-sm text-gray-700">
+        <div className="rounded-lg border bg-card p-4 text-sm text-muted-foreground">
           Returned at {rental.actual_return_time ? new Date(rental.actual_return_time).toLocaleString() : "unknown"}
         </div>
       )}

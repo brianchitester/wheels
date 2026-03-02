@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { LogOut, User } from "lucide-react";
+import { Bike, LayoutDashboard, LogOut, User } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -18,7 +18,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export function UserProfile() {
-  const [user, setUser] = useState<{ email?: string } | null>(null);
+  const [user, setUser] = useState<{ id: string; email?: string } | null>(null);
+  const [role, setRole] = useState<"admin" | "staff" | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const supabase = getSupabaseClient();
@@ -27,6 +28,21 @@ export function UserProfile() {
     const fetchUser = async () => {
       const { data } = await supabase.auth.getUser();
       setUser(data.user);
+
+      if (data.user) {
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("role")
+          .eq("id", data.user.id)
+          .single();
+        if (profile?.role === "admin" || profile?.role === "staff") {
+          setRole(profile.role);
+        } else {
+          setRole(null);
+        }
+      } else {
+        setRole(null);
+      }
       setLoading(false);
     };
 
@@ -38,6 +54,7 @@ export function UserProfile() {
           setUser(session?.user || null);
         } else if (event === "SIGNED_OUT") {
           setUser(null);
+          setRole(null);
         }
       }
     );
@@ -49,6 +66,7 @@ export function UserProfile() {
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
+    setRole(null);
     router.push("/");
     router.refresh();
   };
@@ -91,6 +109,23 @@ export function UserProfile() {
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={() => router.push("/reserve")}>
+          <Bike className="mr-2 h-4 w-4" />
+          <span>Reserve</span>
+        </DropdownMenuItem>
+        {(role === "staff" || role === "admin") && (
+          <DropdownMenuItem onClick={() => router.push("/pos")}>
+            <LayoutDashboard className="mr-2 h-4 w-4" />
+            <span>POS</span>
+          </DropdownMenuItem>
+        )}
+        {role === "admin" && (
+          <DropdownMenuItem onClick={() => router.push("/admin")}>
+            <LayoutDashboard className="mr-2 h-4 w-4" />
+            <span>Admin</span>
+          </DropdownMenuItem>
+        )}
+        <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleSignOut}>
           <LogOut className="mr-2 h-4 w-4" />
           <span>Log out</span>
@@ -99,3 +134,4 @@ export function UserProfile() {
     </DropdownMenu>
   );
 }
+

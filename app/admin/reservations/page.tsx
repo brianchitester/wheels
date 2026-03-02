@@ -138,8 +138,8 @@ export default async function AdminReservationsPage(props: {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-gray-900">Reservations</h2>
-        <p className="mt-1 text-sm text-gray-600">
+        <h2 className="text-2xl font-bold text-foreground">Reservations</h2>
+        <p className="mt-1 text-sm text-muted-foreground">
           Search reservation records and handle cancellations.
         </p>
       </div>
@@ -154,7 +154,7 @@ export default async function AdminReservationsPage(props: {
         </div>
       )}
 
-      <section className="rounded-lg border bg-white p-4">
+      <section className="rounded-lg border bg-card p-4">
         <form className="grid gap-3 sm:grid-cols-4" method="get">
           <input
             name="q"
@@ -181,28 +181,28 @@ export default async function AdminReservationsPage(props: {
         </form>
       </section>
 
-      <section className="rounded-lg border bg-white">
+      <section className="rounded-lg border bg-card">
         <div className="border-b px-4 py-3">
-          <h3 className="text-lg font-semibold text-gray-900">Latest Reservations</h3>
+          <h3 className="text-lg font-semibold text-foreground">Latest Reservations</h3>
         </div>
         <div className="divide-y">
           {(reservations ?? []).map((reservation) => (
             <div key={reservation.id} className="space-y-3 px-4 py-4">
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
-                  <p className="font-medium text-gray-900">{reservation.customer_name}</p>
-                  <p className="text-sm text-gray-600">
+                  <p className="font-medium text-foreground">{reservation.customer_name}</p>
+                  <p className="text-sm text-muted-foreground">
                     {new Date(reservation.start_time).toLocaleString()} to{" "}
                     {new Date(reservation.end_time).toLocaleString()}
                   </p>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-muted-foreground">
                     {reservation.customer_email ?? "-"} • {reservation.customer_phone ?? "-"}
                   </p>
                 </div>
                 <span
                   className={`rounded-full px-2.5 py-1 text-xs font-medium ${
                     reservation.status === "cancelled"
-                      ? "bg-gray-200 text-gray-700"
+                      ? "bg-muted text-muted-foreground"
                       : reservation.status === "pending"
                         ? "bg-amber-100 text-amber-800"
                         : "bg-emerald-100 text-emerald-800"
@@ -242,10 +242,11 @@ export default async function AdminReservationsPage(props: {
             </div>
           ))}
           {(reservations ?? []).length === 0 && (
-            <div className="px-4 py-6 text-sm text-gray-500">No reservations found.</div>
+            <div className="px-4 py-6 text-sm text-muted-foreground">No reservations found.</div>
           )}
         </div>
       </section>
     </div>
   );
 }
+

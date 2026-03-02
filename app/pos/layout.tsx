@@ -8,8 +8,8 @@ export default async function PosLayout({
   await requireStaffPage();
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="border-b bg-white">
+    <div className="min-h-screen bg-background">
+      <header className="border-b bg-card">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           <h1 className="text-xl font-semibold">POS</h1>
           <UserProfile />
@@ -20,4 +20,5 @@ export default async function PosLayout({
     </div>
   );
 }
+
 

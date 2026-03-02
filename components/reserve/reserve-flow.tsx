@@ -236,9 +236,9 @@ export function ReserveFlow({ vehicleTypes }: Props) {
 
   return (
     <div className="space-y-6">
-      <div className="rounded-lg border bg-white p-4">
-        <p className="text-sm text-gray-600">Step {step} of 4</p>
-        <h2 className="mt-1 text-xl font-bold text-gray-900">
+      <div className="rounded-lg border bg-card p-4">
+        <p className="text-sm text-muted-foreground">Step {step} of 4</p>
+        <h2 className="mt-1 text-xl font-bold text-foreground">
           {step === 1 && "Choose Items"}
           {step === 2 && "Schedule and Availability"}
           {step === 3 && "Customer Information"}
@@ -258,8 +258,8 @@ export function ReserveFlow({ vehicleTypes }: Props) {
             const selectedRuleId = selectedRuleByType[vehicleType.id] ?? "";
             const quantity = quantityByType[vehicleType.id] ?? 0;
             return (
-              <div key={vehicleType.id} className="rounded-lg border bg-white p-4">
-                <h3 className="font-semibold text-gray-900">{vehicleType.name}</h3>
+              <div key={vehicleType.id} className="rounded-lg border bg-card p-4">
+                <h3 className="font-semibold text-foreground">{vehicleType.name}</h3>
                 <div className="mt-3 grid gap-3 sm:grid-cols-3">
                   <select
                     value={selectedRuleId}
@@ -298,10 +298,10 @@ export function ReserveFlow({ vehicleTypes }: Props) {
       )}
 
       {step === 2 && (
-        <div className="space-y-4 rounded-lg border bg-white p-4">
+        <div className="space-y-4 rounded-lg border bg-card p-4">
           <div className="grid gap-3 sm:grid-cols-2">
             <div>
-              <label className="mb-1 block text-sm font-medium text-gray-700">Start time</label>
+              <label className="mb-1 block text-sm font-medium text-muted-foreground">Start time</label>
               <input
                 type="datetime-local"
                 value={startTimeLocal}
@@ -325,7 +325,7 @@ export function ReserveFlow({ vehicleTypes }: Props) {
           </div>
 
           <div className="rounded-md border p-3">
-            <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+            <label className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
               <input
                 type="checkbox"
                 checked={deliveryRequired}
@@ -379,7 +379,7 @@ export function ReserveFlow({ vehicleTypes }: Props) {
       )}
 
       {step === 3 && (
-        <div className="grid gap-3 rounded-lg border bg-white p-4">
+        <div className="grid gap-3 rounded-lg border bg-card p-4">
           <input
             placeholder="Full name"
             value={customerInfo.customer_name}
@@ -417,8 +417,8 @@ export function ReserveFlow({ vehicleTypes }: Props) {
       )}
 
       {step === 4 && (
-        <div className="space-y-4 rounded-lg border bg-white p-4">
-          <h3 className="font-semibold text-gray-900">Reservation Summary</h3>
+        <div className="space-y-4 rounded-lg border bg-card p-4">
+          <h3 className="font-semibold text-foreground">Reservation Summary</h3>
           <div className="space-y-2">
             {selectedItems.map((item) => {
               const vehicle = vehicleTypes.find((v) => v.id === item.vehicle_type_id);
@@ -431,7 +431,7 @@ export function ReserveFlow({ vehicleTypes }: Props) {
                 >
                   <div>
                     <p className="font-medium">{vehicle.name}</p>
-                    <p className="text-gray-600">
+                    <p className="text-muted-foreground">
                       {formatDuration(rule)} x {item.quantity}
                     </p>
                   </div>
@@ -442,7 +442,7 @@ export function ReserveFlow({ vehicleTypes }: Props) {
               );
             })}
           </div>
-          <div className="rounded-md border bg-gray-50 p-3 text-sm">
+          <div className="rounded-md border bg-background p-3 text-sm">
             <p>
               <span className="font-medium">Start:</span>{" "}
               {startTimeLocal ? new Date(startTimeLocal).toLocaleString() : "-"}
@@ -526,3 +526,4 @@ export function ReserveFlow({ vehicleTypes }: Props) {
     </div>
   );
 }
+

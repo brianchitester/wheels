@@ -163,8 +163,8 @@ export default async function AdminPricingPage(props: {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-gray-900">Pricing Rules</h2>
-        <p className="mt-1 text-sm text-gray-600">
+        <h2 className="text-2xl font-bold text-foreground">Pricing Rules</h2>
+        <p className="mt-1 text-sm text-muted-foreground">
           Configure duration tiers and deposit requirements per vehicle type.
         </p>
       </div>
@@ -179,8 +179,8 @@ export default async function AdminPricingPage(props: {
         </div>
       )}
 
-      <section className="rounded-lg border bg-white p-4">
-        <h3 className="text-lg font-semibold text-gray-900">Add Pricing Rule</h3>
+      <section className="rounded-lg border bg-card p-4">
+        <h3 className="text-lg font-semibold text-foreground">Add Pricing Rule</h3>
         <form action={createPricingRule} className="mt-4 grid gap-3 sm:grid-cols-6">
           <select name="vehicle_type_id" className="rounded-md border px-3 py-2 text-sm" required>
             <option value="">Vehicle Type</option>
@@ -238,13 +238,13 @@ export default async function AdminPricingPage(props: {
         </form>
       </section>
 
-      <section className="rounded-lg border bg-white">
+      <section className="rounded-lg border bg-card">
         <div className="border-b px-4 py-3">
-          <h3 className="text-lg font-semibold text-gray-900">Rules</h3>
+          <h3 className="text-lg font-semibold text-foreground">Rules</h3>
         </div>
         <div className="overflow-x-auto">
           <table className="min-w-full text-sm">
-            <thead className="bg-gray-50 text-left text-gray-600">
+            <thead className="bg-background text-left text-muted-foreground">
               <tr>
                 <th className="px-4 py-2">Type</th>
                 <th className="px-4 py-2">Duration</th>
@@ -258,24 +258,24 @@ export default async function AdminPricingPage(props: {
             <tbody>
               {typedPricingRules.map((rule) => (
                 <tr key={rule.id} className="border-t">
-                  <td className="px-4 py-2 font-medium text-gray-900">
+                  <td className="px-4 py-2 font-medium text-foreground">
                     {rule.vehicle_types?.name ?? "Unknown"}
                   </td>
-                  <td className="px-4 py-2 text-gray-700">
+                  <td className="px-4 py-2 text-muted-foreground">
                     {rule.duration_value} {rule.duration_unit}
                     {rule.duration_value > 1 ? "s" : ""}
                   </td>
-                  <td className="px-4 py-2 text-gray-700">
+                  <td className="px-4 py-2 text-muted-foreground">
                     ${(rule.price_cents / 100).toFixed(2)}
                   </td>
-                  <td className="px-4 py-2 text-gray-700">
+                  <td className="px-4 py-2 text-muted-foreground">
                     ${(rule.deposit_cents / 100).toFixed(2)}
                   </td>
-                  <td className="px-4 py-2 text-gray-700">{rule.season_key ?? "-"}</td>
+                  <td className="px-4 py-2 text-muted-foreground">{rule.season_key ?? "-"}</td>
                   <td className="px-4 py-2">
                     <span
                       className={`rounded-full px-2.5 py-1 text-xs font-medium ${
-                        rule.active ? "bg-emerald-100 text-emerald-800" : "bg-gray-200 text-gray-700"
+                        rule.active ? "bg-emerald-100 text-emerald-800" : "bg-muted text-muted-foreground"
                       }`}
                     >
                       {rule.active ? "active" : "inactive"}
@@ -300,7 +300,7 @@ export default async function AdminPricingPage(props: {
               ))}
               {typedPricingRules.length === 0 && (
                 <tr>
-                  <td className="px-4 py-6 text-gray-500" colSpan={7}>
+                  <td className="px-4 py-6 text-muted-foreground" colSpan={7}>
                     No pricing rules yet.
                   </td>
                 </tr>
@@ -312,3 +312,4 @@ export default async function AdminPricingPage(props: {
     </div>
   );
 }
+

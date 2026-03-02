@@ -122,8 +122,8 @@ export function PosNewFlow({
     <form action={action} className="space-y-6">
       <input type="hidden" name="payload_json" value={JSON.stringify(payload)} />
 
-      <section className="rounded-lg border bg-white p-4">
-        <h2 className="text-lg font-semibold text-gray-900">Walk-In Line Items</h2>
+      <section className="rounded-lg border bg-card p-4">
+        <h2 className="text-lg font-semibold text-foreground">Walk-In Line Items</h2>
         <div className="mt-3 space-y-4">
           {lineItems.map((item, index) => {
             const rules = rulesByType.get(item.vehicle_type_id) ?? [];
@@ -198,7 +198,7 @@ export function PosNewFlow({
                 </div>
 
                 <div className="mt-3">
-                  <label className="mb-1 block text-xs font-medium text-gray-700">
+                  <label className="mb-1 block text-xs font-medium text-muted-foreground">
                     Assigned vehicles (select {item.quantity})
                   </label>
                   <select
@@ -228,7 +228,7 @@ export function PosNewFlow({
                 </div>
 
                 <div className="mt-2 flex items-center justify-between">
-                  <p className="text-xs text-gray-600">
+                  <p className="text-xs text-muted-foreground">
                     Selected {item.assigned_vehicle_ids.length} / {item.quantity}
                   </p>
                   {lineItems.length > 1 && (
@@ -276,8 +276,8 @@ export function PosNewFlow({
         </div>
       </section>
 
-      <section className="rounded-lg border bg-white p-4">
-        <h2 className="text-lg font-semibold text-gray-900">Customer and Payment</h2>
+      <section className="rounded-lg border bg-card p-4">
+        <h2 className="text-lg font-semibold text-foreground">Customer and Payment</h2>
         <div className="mt-3 grid gap-3 sm:grid-cols-2">
           <input
             placeholder="Customer name"
@@ -325,12 +325,12 @@ export function PosNewFlow({
             rows={3}
           />
         </div>
-        <p className="mt-2 text-xs text-gray-600">
+        <p className="mt-2 text-xs text-muted-foreground">
           Inferred subtotal: {toCurrency(inferredSubtotal)}
         </p>
       </section>
 
-      <section className="rounded-lg border bg-white p-4">
+      <section className="rounded-lg border bg-card p-4">
         <label className="inline-flex items-center gap-2 text-sm font-medium">
           <input
             type="checkbox"
@@ -358,4 +358,5 @@ export function PosNewFlow({
     </form>
   );
 }
+
 

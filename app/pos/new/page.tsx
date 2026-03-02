@@ -282,8 +282,8 @@ export default async function PosNewPage(props: { searchParams: SearchParams }) 
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-gray-900">New Walk-In Rental</h2>
-        <p className="mt-1 text-sm text-gray-600">
+        <h2 className="text-2xl font-bold text-foreground">New Walk-In Rental</h2>
+        <p className="mt-1 text-sm text-muted-foreground">
           Build line items, assign assets, and start an active rental.
         </p>
       </div>
@@ -314,4 +314,5 @@ export default async function PosNewPage(props: { searchParams: SearchParams }) 
     </div>
   );
 }
+
 
