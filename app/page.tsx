@@ -15,8 +15,8 @@ export default function HomePage() {
             </p>
             <div className="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
               <div className="rounded-md shadow">
-                <Link href="/dashboard">
-                  <Button className="w-full">Get Started</Button>
+                <Link href="/reserve">
+                  <Button className="w-full">Reserve Now</Button>
                 </Link>
               </div>
               <div className="mt-3 rounded-md shadow sm:mt-0 sm:ml-3">
