@@ -139,13 +139,23 @@ export default async function AdminPricingPage(props: {
       .order("name"),
     supabase
       .from("pricing_rules")
-      .select("id,duration_unit,duration_value,price_cents,deposit_cents,active,season_key,vehicle_types(name,category)")
+      .select(
+        "id,vehicle_type_id,duration_unit,duration_value,price_cents,deposit_cents,active,season_key"
+      )
       .eq("location_id", "main")
       .order("created_at", { ascending: false }),
   ]);
 
+  const vehicleTypeById = new Map(
+    (vehicleTypes ?? []).map((vt) => [
+      vt.id,
+      { name: vt.name, category: vt.category },
+    ])
+  );
+
   const typedPricingRules = (pricingRules ?? []) as Array<{
     id: string;
+    vehicle_type_id: string;
     duration_unit: "hour" | "day" | "week";
     duration_value: number;
     price_cents: number;
@@ -259,7 +269,7 @@ export default async function AdminPricingPage(props: {
               {typedPricingRules.map((rule) => (
                 <tr key={rule.id} className="border-t">
                   <td className="px-4 py-2 font-medium text-foreground">
-                    {rule.vehicle_types?.name ?? "Unknown"}
+                    {vehicleTypeById.get(rule.vehicle_type_id)?.name ?? "Unknown"}
                   </td>
                   <td className="px-4 py-2 text-muted-foreground">
                     {rule.duration_value} {rule.duration_unit}

@@ -48,7 +48,9 @@ async function convertReservation(formData: FormData) {
       p_reservation_id: payload.reservation_id,
       p_assigned_vehicle_ids: allAssignedVehicleIds,
       p_override_flag: payload.override_flag,
-      p_override_reason: payload.override_flag ? payload.override_reason?.trim() : null,
+      p_override_reason: payload.override_flag
+        ? payload.override_reason?.trim()
+        : undefined,
     });
 
     if (error || !rentalId) {
@@ -90,10 +92,33 @@ export default async function PosReservationDetailPage(props: {
 
   const { data: reservationItems } = await supabase
     .from("reservation_items")
-    .select(
-      "vehicle_type_id,quantity,pricing_rule_id,pricing_rules(duration_unit,duration_value),vehicle_types(name)"
-    )
+    .select("vehicle_type_id,quantity,pricing_rule_id")
     .eq("reservation_id", reservation.id);
+
+  const vehicleTypeIdsForItems = Array.from(
+    new Set((reservationItems ?? []).map((item) => item.vehicle_type_id))
+  );
+  const pricingRuleIdsForItems = Array.from(
+    new Set((reservationItems ?? []).map((item) => item.pricing_rule_id))
+  );
+
+  const [{ data: itemVehicleTypes }, { data: itemPricingRules }] = await Promise.all([
+    vehicleTypeIdsForItems.length
+      ? supabase
+          .from("vehicle_types")
+          .select("id,name")
+          .in("id", vehicleTypeIdsForItems)
+      : Promise.resolve({ data: [] }),
+    pricingRuleIdsForItems.length
+      ? supabase
+          .from("pricing_rules")
+          .select("id,duration_unit,duration_value")
+          .in("id", pricingRuleIdsForItems)
+      : Promise.resolve({ data: [] }),
+  ]);
+
+  const vehicleTypeById = new Map((itemVehicleTypes ?? []).map((vt) => [vt.id, vt]));
+  const pricingRuleById = new Map((itemPricingRules ?? []).map((pr) => [pr.id, pr]));
 
   const groupedByType = new Map<
     string,
@@ -101,14 +126,15 @@ export default async function PosReservationDetailPage(props: {
   >();
   for (const item of reservationItems ?? []) {
     const key = item.vehicle_type_id;
-    const durationUnit = item.pricing_rules?.duration_unit ?? "day";
-    const durationValue = item.pricing_rules?.duration_value ?? 1;
+    const rule = pricingRuleById.get(item.pricing_rule_id);
+    const durationUnit = rule?.duration_unit ?? "day";
+    const durationValue = rule?.duration_value ?? 1;
     const durationLabel = `${durationValue} ${durationUnit}${durationValue > 1 ? "s" : ""}`;
     const current = groupedByType.get(key);
     if (!current) {
       groupedByType.set(key, {
         vehicle_type_id: key,
-        vehicle_type_name: item.vehicle_types?.name ?? "Vehicle",
+        vehicle_type_name: vehicleTypeById.get(key)?.name ?? "Vehicle",
         quantity: item.quantity,
         duration_label: durationLabel,
       });

@@ -69,11 +69,11 @@ export default async function PosRentalDetailPage(props: {
         .single(),
       supabase
         .from("rental_items")
-        .select("id,quantity,unit_price_cents,vehicle_types(name),pricing_rules(duration_unit,duration_value)")
+        .select("id,quantity,unit_price_cents,vehicle_type_id,pricing_rule_id")
         .eq("rental_id", id),
       supabase
         .from("rental_assets")
-        .select("id,vehicle_id,vehicles(asset_tag)")
+        .select("id,vehicle_id")
         .eq("rental_id", id),
       supabase
         .from("payments")
@@ -85,6 +85,36 @@ export default async function PosRentalDetailPage(props: {
   if (!rental) {
     redirect("/pos?error=Rental%20not%20found");
   }
+
+  const vehicleTypeIds = Array.from(
+    new Set((rentalItems ?? []).map((item) => item.vehicle_type_id))
+  );
+  const pricingRuleIds = Array.from(
+    new Set((rentalItems ?? []).map((item) => item.pricing_rule_id))
+  );
+  const assetVehicleIds = Array.from(
+    new Set((rentalAssets ?? []).map((asset) => asset.vehicle_id))
+  );
+
+  const [{ data: vehicleTypes }, { data: pricingRules }, { data: vehicles }] =
+    await Promise.all([
+      vehicleTypeIds.length
+        ? supabase.from("vehicle_types").select("id,name").in("id", vehicleTypeIds)
+        : Promise.resolve({ data: [] }),
+      pricingRuleIds.length
+        ? supabase
+            .from("pricing_rules")
+            .select("id,duration_unit,duration_value")
+            .in("id", pricingRuleIds)
+        : Promise.resolve({ data: [] }),
+      assetVehicleIds.length
+        ? supabase.from("vehicles").select("id,asset_tag").in("id", assetVehicleIds)
+        : Promise.resolve({ data: [] }),
+    ]);
+
+  const vehicleTypeById = new Map((vehicleTypes ?? []).map((vt) => [vt.id, vt]));
+  const pricingRuleById = new Map((pricingRules ?? []).map((pr) => [pr.id, pr]));
+  const vehicleById = new Map((vehicles ?? []).map((v) => [v.id, v]));
 
   const totalAmount = (rentalItems ?? []).reduce(
     (sum, item) => sum + item.quantity * item.unit_price_cents,
@@ -121,10 +151,13 @@ export default async function PosRentalDetailPage(props: {
           {(rentalItems ?? []).map((item) => (
             <div key={item.id} className="flex justify-between rounded-md border px-3 py-2">
               <div>
-                <p className="font-medium">{item.vehicle_types?.name ?? "Vehicle"}</p>
+                <p className="font-medium">
+                  {vehicleTypeById.get(item.vehicle_type_id)?.name ?? "Vehicle"}
+                </p>
                 <p className="text-muted-foreground">
-                  {item.pricing_rules?.duration_value ?? 1}{" "}
-                  {item.pricing_rules?.duration_unit ?? "day"} x {item.quantity}
+                  {pricingRuleById.get(item.pricing_rule_id)?.duration_value ?? 1}{" "}
+                  {pricingRuleById.get(item.pricing_rule_id)?.duration_unit ?? "day"} x{" "}
+                  {item.quantity}
                 </p>
               </div>
               <p className="font-medium">${((item.quantity * item.unit_price_cents) / 100).toFixed(2)}</p>
@@ -139,7 +172,7 @@ export default async function PosRentalDetailPage(props: {
         <div className="mt-3 flex flex-wrap gap-2 text-sm">
           {(rentalAssets ?? []).map((asset) => (
             <span key={asset.id} className="rounded-md border px-2 py-1">
-              {asset.vehicles?.asset_tag ?? asset.vehicle_id}
+              {vehicleById.get(asset.vehicle_id)?.asset_tag ?? asset.vehicle_id}
             </span>
           ))}
           {(rentalAssets ?? []).length === 0 && <p className="text-muted-foreground">No assigned assets.</p>}
@@ -187,4 +220,3 @@ export default async function PosRentalDetailPage(props: {
     </div>
   );
 }
-

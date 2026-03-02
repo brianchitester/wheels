@@ -6,7 +6,6 @@ import { SubmitButton } from "@/components/admin/submit-button";
 type LineItem = {
   vehicle_type_id: string;
   vehicle_type_name: string;
-  pricing_rule_id: string;
   duration_label: string;
   quantity: number;
 };

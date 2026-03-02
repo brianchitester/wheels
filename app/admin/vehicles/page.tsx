@@ -154,10 +154,17 @@ export default async function AdminVehiclesPage(props: {
       .order("name"),
     supabase
       .from("vehicles")
-      .select("id,asset_tag,status,notes,vehicle_type_id,vehicle_types(name,category)")
+      .select("id,asset_tag,status,notes,vehicle_type_id")
       .eq("location_id", "main")
       .order("asset_tag"),
   ]);
+
+  const vehicleTypeById = new Map(
+    (vehicleTypes ?? []).map((vt) => [
+      vt.id,
+      { name: vt.name, category: vt.category },
+    ])
+  );
 
   const typedVehicles = (vehicles ?? []) as Array<{
     id: string;
@@ -165,12 +172,6 @@ export default async function AdminVehiclesPage(props: {
     status: "available" | "maintenance";
     notes: string | null;
     vehicle_type_id: string;
-    vehicle_types:
-      | {
-          name: string;
-          category: "bike" | "car";
-        }
-      | null;
   }>;
 
   return (
@@ -249,7 +250,7 @@ export default async function AdminVehiclesPage(props: {
                 <tr key={vehicle.id} className="border-t">
                   <td className="px-4 py-2 font-medium text-foreground">{vehicle.asset_tag}</td>
                   <td className="px-4 py-2 text-muted-foreground">
-                    {vehicle.vehicle_types?.name ?? "Unknown"}
+                    {vehicleTypeById.get(vehicle.vehicle_type_id)?.name ?? "Unknown"}
                   </td>
                   <td className="px-4 py-2">
                     <span
