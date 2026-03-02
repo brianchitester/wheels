@@ -123,7 +123,8 @@ export default async function PosReservationDetailPage(props: {
   const lineItems = Array.from(groupedByType.values());
   const vehicleTypeIds = lineItems.map((line) => line.vehicle_type_id);
 
-  const [{ data: vehicles }, { data: activeRentals }] = await Promise.all([
+  const [{ data: vehicles }, { data: activeRentals }, { data: depositPayments }] =
+    await Promise.all([
     vehicleTypeIds.length
       ? supabase
           .from("vehicles")
@@ -134,6 +135,12 @@ export default async function PosReservationDetailPage(props: {
           .order("asset_tag")
       : Promise.resolve({ data: [] }),
     supabase.from("rentals").select("id").eq("location_id", "main").eq("status", "active"),
+    supabase
+      .from("payments")
+      .select("id,amount_cents,status,method,created_at")
+      .eq("reservation_id", reservation.id)
+      .eq("type", "deposit")
+      .order("created_at", { ascending: false }),
   ]);
 
   const activeRentalIds = (activeRentals ?? []).map((r) => r.id);
@@ -153,6 +160,8 @@ export default async function PosReservationDetailPage(props: {
     available: !rentedVehicleIds.has(vehicle.id),
   }));
 
+  const latestDepositPayment = (depositPayments ?? [])[0];
+
   return (
     <div className="space-y-6">
       <div className="rounded-lg border bg-white p-4">
@@ -164,6 +173,12 @@ export default async function PosReservationDetailPage(props: {
           {reservation.customer_email ?? "-"} • {reservation.customer_phone ?? "-"}
         </p>
         <p className="text-sm text-gray-600">Status: {reservation.status}</p>
+        <p className="text-sm text-gray-600">
+          Deposit:{" "}
+          {latestDepositPayment && latestDepositPayment.status === "succeeded"
+            ? `Paid $${(latestDepositPayment.amount_cents / 100).toFixed(2)}`
+            : "Unpaid"}
+        </p>
       </div>
 
       {successMessage && (
@@ -177,6 +192,23 @@ export default async function PosReservationDetailPage(props: {
         </div>
       )}
 
+      <section className="rounded-lg border bg-white p-4">
+        <h3 className="font-semibold text-gray-900">Deposit Payments</h3>
+        <div className="mt-3 space-y-2 text-sm">
+          {(depositPayments ?? []).map((payment) => (
+            <div key={payment.id} className="flex justify-between rounded-md border px-3 py-2">
+              <span>
+                {payment.method} • {payment.status}
+              </span>
+              <span>${(payment.amount_cents / 100).toFixed(2)}</span>
+            </div>
+          ))}
+          {(depositPayments ?? []).length === 0 && (
+            <p className="text-gray-500">No deposit payments recorded.</p>
+          )}
+        </div>
+      </section>
+
       <ReservationPickupFlow
         reservationId={reservation.id}
         lineItems={lineItems}
@@ -186,4 +218,3 @@ export default async function PosReservationDetailPage(props: {
     </div>
   );
 }
-

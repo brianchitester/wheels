@@ -201,8 +201,27 @@ export function ReserveFlow({ vehicleTypes }: Props) {
       }
 
       const reservationId = payload.reservation?.id;
+      const reservationStatus = payload.reservation?.status;
       if (!reservationId) {
         throw new Error("Reservation created but no ID returned.");
+      }
+
+      if (reservationStatus === "pending") {
+        const depositResponse = await fetch("/api/public/deposit-session", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ reservation_id: reservationId }),
+        });
+        const depositPayload = await depositResponse.json();
+
+        if (!depositResponse.ok) {
+          throw new Error(depositPayload.error ?? "Failed to start deposit checkout.");
+        }
+
+        if (depositPayload.requires_payment && depositPayload.checkout_url) {
+          window.location.href = depositPayload.checkout_url as string;
+          return;
+        }
       }
 
       window.location.href = `/reserve/success?id=${encodeURIComponent(reservationId)}`;
@@ -507,4 +526,3 @@ export function ReserveFlow({ vehicleTypes }: Props) {
     </div>
   );
 }
-
